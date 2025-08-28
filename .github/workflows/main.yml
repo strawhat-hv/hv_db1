@@ -39,4 +39,8 @@ jobs:
       - name: Update git repo
         run: |
           databricks repos update /Workspace/hv_db1 --branch main
+
+      - name: job creation
+        run: |
+          databricks jobs create --json-file /src/jobs.json
       
