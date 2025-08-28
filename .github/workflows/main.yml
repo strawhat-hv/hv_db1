@@ -24,3 +24,8 @@ jobs:
           # Install latest from 'main'. To pin, replace 'main' with a tag like 'v0.265.0'.
           curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
           # Ensure PATH includes the CLI install location (usually ~/.l
+          
+      - name: Update git repo
+        run: |
+          databricks repos update /Workspace/hv_db1 --branch main
+      
