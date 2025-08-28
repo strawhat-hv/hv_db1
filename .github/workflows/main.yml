@@ -1,34 +1,24 @@
 name: Update Databricks Repo on Push
- 
+
 on:
+  push:
+    branches:
+      - main
 
-   push:
-
-     branches:
-
-       - main
- 
 jobs:
+  update-repo:
+    runs-on: self-hosted
 
-   update-repo:
-
-     runs-on: self-hosted
- 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-     - name: Checkout repository
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-       uses: actions/checkout@v3
- 
-    - name: Set up Python
-
-       uses: actions/setup-python@v4
-
-       with:
-
-         python-version: '3.11'
- 
-    - name: Install Databricks CLI (curl)
+      - name: Install Databricks CLI (curl)
         run: |
           set -euxo pipefail
           # Install latest from 'main'. To pin, replace 'main' with a tag like 'v0.265.0'.
@@ -36,17 +26,12 @@ jobs:
           # Ensure PATH includes the CLI install location (usually ~/.local/bin)
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           databricks -v
- 
-    - name: Configure Databricks CLI
 
-       run: |
+      - name: Configure Databricks CLI
+        run: |
+          export DATABRICKS_HOST=${{ secrets.DATABRICKS_URL }}
+          export DATABRICKS_TOKEN=${{ secrets.DATABRICKS_TOKEN }}
 
-         export DATABRICKS_HOST = ${{ secrets.DATABRICKS_URL }}
-
-         export DATABRICKS_TOKEN = ${{ secrets.DATABRICKS_TOKEN }}
- 
-    - name: Update Repo Branch
-
-       run: |
-
-         databricks repos update ${{ secrets.repo }} --branch ${{ secrets.BRANCH_NAME }}
+      - name: Update Repo Branch
+        run: |
+          databricks repos update ${{ secrets.REPO }} --branch ${{ secrets.BRANCH_NAME }}
