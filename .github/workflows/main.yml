@@ -8,6 +8,12 @@ on:
 jobs:
   update-repo:
     runs-on: ubuntu-latest
+    # Make creds available to every step in this job
+    env:
+      # Must include the scheme and no trailing slash, e.g. https://adb-1234567890123456.7.azuredatabricks.net
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_URL }}
+      # A PAT with workspace scope
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
 
     steps:
       - name: Checkout repository
@@ -25,10 +31,10 @@ jobs:
           curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
           # Ensure PATH includes the CLI install location (usually ~/.l
 
-      - name: Configure Databricks CLI
-        run: |
-          export DATABRICKS_HOST=${{ secrets.DATABRICKS_URL }}
-          export DATABRICKS_TOKEN=${{ secrets.DATABRICKS_TOKEN }}
+      # - name: Configure Databricks CLI
+      #   run: |
+      #     export DATABRICKS_HOST=${{ secrets.DATABRICKS_URL }}
+      #     export DATABRICKS_TOKEN=${{ secrets.DATABRICKS_TOKEN }}
           
       - name: Update git repo
         run: |
