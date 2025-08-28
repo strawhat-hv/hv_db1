@@ -1,0 +1,47 @@
+name: Update Databricks Repo on Push
+ 
+on:
+
+   push:
+
+     branches:
+
+       - main
+ 
+jobs:
+
+   update-repo:
+
+     runs-on: self-hosted
+ 
+    steps:
+
+     - name: Checkout repository
+
+       uses: actions/checkout@v3
+ 
+    - name: Set up Python
+
+       uses: actions/setup-python@v4
+
+       with:
+
+         python-version: '3.11'
+ 
+    - name: Install Databricks CLI
+
+       run: pip install databricks
+ 
+    - name: Configure Databricks CLI
+
+       run: |
+
+         export DATABRICKS_HOST = ${{ secrets.DATABRICKS_URL }}
+
+         export DATABRICKS_TOKEN = ${{ secrets.DATABRICKS_TOKEN }}
+ 
+    - name: Update Repo Branch
+
+       run: |
+
+         databricks repos update ${{ secrets.REPO_ID }} --branch ${{ secrets.BRANCH_NAME }}
