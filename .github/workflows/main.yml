@@ -7,7 +7,7 @@ on:
 
 jobs:
   update-repo:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -23,15 +23,4 @@ jobs:
           set -euxo pipefail
           # Install latest from 'main'. To pin, replace 'main' with a tag like 'v0.265.0'.
           curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
-          # Ensure PATH includes the CLI install location (usually ~/.local/bin)
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          databricks -v
-
-      - name: Configure Databricks CLI
-        run: |
-          export DATABRICKS_HOST=${{ secrets.DATABRICKS_URL }}
-          export DATABRICKS_TOKEN=${{ secrets.DATABRICKS_TOKEN }}
-
-      - name: Update Repo Branch
-        run: |
-          databricks repos update ${{ secrets.REPO }} --branch ${{ secrets.BRANCH_NAME }}
+          # Ensure PATH includes the CLI install location (usually ~/.l
