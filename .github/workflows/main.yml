@@ -42,5 +42,5 @@ jobs:
 
       - name: job creation
         run: |
-          databricks jobs create --json-file /src/jobs.json
+          databricks jobs create --json /src/jobs.json
       
